@@ -1,5 +1,5 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://avatars.githubusercontent.com/u/41831998" height="200" alt="7Code Logo" /></a>
+<p>
+  <a href="https://7code.ro/" target="blank"><img src="https://avatars.githubusercontent.com/u/41831998" height="100" alt="7Code Logo" /></a>
 </p>
 
 ## Description
