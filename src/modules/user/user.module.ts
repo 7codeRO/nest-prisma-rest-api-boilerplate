@@ -5,12 +5,12 @@ import { PrismaModule } from '../prisma/prisma.module';
 
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
-import { UserModelEventsService } from './user.model.events.service';
+import { UserListener } from './user.listener';
 
 @Module({
   imports: [PrismaModule],
   controllers: [UserController],
-  providers: [UserService, PrismaService, UserModelEventsService],
+  providers: [UserService, PrismaService, UserListener],
   exports: [UserService],
 })
 export class UserModule {}

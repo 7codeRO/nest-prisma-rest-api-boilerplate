@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { AuthHelpers } from '../../shared/helpers/auth.helpers';
 
 @Injectable()
-export class UserModelEventsService {
+export class UserListener {
   static async onCreated(params, next) {
     // Check incoming query type
     if (params.model == 'User') {
