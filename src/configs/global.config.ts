@@ -1,6 +1,8 @@
+import { API_PREFIX } from '../shared/constants/global.constants';
+
 import { Config } from './config.interface';
 
-const config: Config = {
+export const GLOBAL_CONFIG: Config = {
   nest: {
     port: 3000,
   },
@@ -9,16 +11,13 @@ const config: Config = {
   },
   swagger: {
     enabled: true,
-    title: 'Nestjs FTW',
+    title: 'Nestjs Prisma Starter',
     description: 'The nestjs API description',
     version: '1.5',
-    path: 'api',
+    path: API_PREFIX,
   },
   security: {
-    expiresIn: '2m',
-    refreshIn: '7d',
+    expiresIn: 3600 * 24, // 24h
     bcryptSaltOrRound: 10,
   },
 };
-
-export default (): Config => config;

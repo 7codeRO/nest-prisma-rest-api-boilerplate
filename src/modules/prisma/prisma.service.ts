@@ -1,11 +1,9 @@
-import {
-  Injectable,
-  OnModuleDestroy,
-  OnModuleInit,
-} from '@nestjs/common';
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
-import { PRISMA_CLIENT_OPTIONS } from './prisma.config';
+
 import { UserModelEventsService } from '../user/user.model.events.service';
+
+import { PRISMA_CLIENT_OPTIONS } from './prisma.config';
 
 @Injectable()
 export class PrismaService
@@ -18,8 +16,8 @@ export class PrismaService
   async onModuleInit() {
     await this.$connect();
 
-    this.$on('error', (e) => {
-      console.log('error', e);
+    this.$on('error', (_e) => {
+      // Do something
     });
 
     this.$use(UserModelEventsService.onCreated);

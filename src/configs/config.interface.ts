@@ -2,7 +2,6 @@ export interface Config {
   nest: NestConfig;
   cors: CorsConfig;
   swagger: SwaggerConfig;
-  // graphql: GraphqlConfig;
   security: SecurityConfig;
 }
 
@@ -30,7 +29,6 @@ export interface GraphqlConfig {
 }
 
 export interface SecurityConfig {
-  expiresIn: string;
-  refreshIn: string;
+  expiresIn: number;
   bcryptSaltOrRound: string | number;
 }

@@ -1,18 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+
+import { AuthHelpers } from '../../shared/helpers/auth.helpers';
 
 @Injectable()
 export class UserModelEventsService {
   static async onCreated(params, next) {
-    console.log(params.args);
-
     // Check incoming query type
     if (params.model == 'User') {
       if (params.action === 'create' || params.action === 'update') {
-        const saltOrRounds = 10;
         const password = params.args['data'].password;
 
-        const encryptedPass = await bcrypt.hash(password, saltOrRounds);
+        const encryptedPass = await AuthHelpers.hash(password);
 
         params.args['data'] = {
           ...params.args['data'],
@@ -20,7 +18,7 @@ export class UserModelEventsService {
         };
       }
     }
-    console.log(params.args);
+
     return next(params);
   }
 }

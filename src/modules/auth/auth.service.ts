@@ -1,11 +1,13 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import { User } from '@prisma/client';
 
 import { UserService } from '../user/user.service';
-import { AuthResponseDTO, LoginUserDTO, RegisterUserDTO } from './auth.dto';
-import { User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { AuthHelpers } from '../../shared/helpers/auth.helpers';
+import { GLOBAL_CONFIG } from '../../configs/global.config';
+
+import { AuthResponseDTO, LoginUserDTO, RegisterUserDTO } from './auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -20,16 +22,15 @@ export class AuthService {
       email: loginUserDTO.email,
     });
 
-    console.log({ userData });
-
     if (!userData) {
       throw new UnauthorizedException();
     }
 
-    const isMatch = await bcrypt.compare(
+    const isMatch = await AuthHelpers.verify(
       loginUserDTO.password,
       userData.password,
     );
+
     if (!isMatch) {
       throw new UnauthorizedException();
     }
@@ -43,7 +44,7 @@ export class AuthService {
     };
 
     const accessToken = this.jwtService.sign(payload, {
-      expiresIn: 3600, //1h
+      expiresIn: GLOBAL_CONFIG.security.expiresIn,
     });
 
     return {
@@ -51,7 +52,6 @@ export class AuthService {
       accessToken: accessToken,
     };
   }
-
   public async register(user: RegisterUserDTO): Promise<User> {
     return this.userService.createUser(user);
   }
