@@ -1,0 +1,61 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Run build task
+        run: npm run build
+
+      - name: store-env
+        uses: Garryone/store-env@master
+        env:
+          PORT: 5001
+          NODE_ENV: production
+
+          DATABASE_NAME: db_name
+          DATABASE_HOST: localhost
+          DATABASE_USERNAME: ${{ secrets.DB_USER }}
+          DATABASE_PASSWORD: ${{ secrets.DB_PASS }}
+          DATABASE_PORT: 5432
+
+          APP_FRONTEND_URL: http://localhost:4200
+          JWT_SIGNATURE: secret12356789
+
+      - name: Copy build to Server
+        uses: GarryOne/ssh-deploy@master
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-avzr --delete"
+          SOURCE: "/"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: /var/www/nest-prisma-starter/prod/prisma-api
+
+      - name: DB Sync & Start App
+        uses: appleboy/ssh-action@master
+        with:
+          script_stop: true
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/nest-prisma-starter/prod/prisma-api
+            npx prisma migrate deploy
+            pm2 startOrReload prod.ecosystem.config.js --update-env --time

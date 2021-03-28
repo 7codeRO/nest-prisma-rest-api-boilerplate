@@ -6,6 +6,14 @@
 
 [Nest](https://github.com/nestjs/nest) + [Prisma](https://github.com/prisma/prisma) + [TypeScript](https://github.com/microsoft/TypeScript) starter repository.
 
+### Production-ready REST API:
+* Error Handling
+* Logging
+* GitHub Actions CI/CD pipeline
+* DB Seeds
+
+## TO-DO
+* Add [Recap.DEV](https://recap.dev/) integration - Tracing/Monitoring service
 
 ## Installation
 
