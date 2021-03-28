@@ -2,8 +2,8 @@ name: Node.js CI
 
 on:
   push:
-#    branches:
-#      - master
+    branches:
+      - test-branch # change to "master" or smth else
 
 jobs:
   deploy:
