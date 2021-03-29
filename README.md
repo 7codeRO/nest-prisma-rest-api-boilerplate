@@ -7,13 +7,21 @@
 [Nest](https://github.com/nestjs/nest) + [Prisma](https://github.com/prisma/prisma) + [TypeScript](https://github.com/microsoft/TypeScript) starter repository.
 
 ### Production-ready REST API:
-* Error Handling
-* Logging
-* GitHub Actions CI/CD pipeline
-* DB Seeds
+* Error Handling (Exception Filters)
+* Logging System
+* DB Seeds/Migrations
+* Built-in AuthModule, using JWT. Route Guards
+* Model Events Listener (onCreated, …)
+* Deployable. CI/CD pipeline using Github Actions.
+* Advanced ESLint/TSLint config. (e.g: auto-fix will remove unused imports)
+* Shared services/constants/helpers
+* Middlewares/Interceptors implementation example.
 
 ## TO-DO
 * Add [Recap.DEV](https://recap.dev/) integration - Tracing/Monitoring service
+* Add Unit tests.
+* Add Social Media Auth
+* ...
 
 ## Installation
 
