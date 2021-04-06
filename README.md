@@ -21,6 +21,7 @@
 * Add [Recap.DEV](https://recap.dev/) integration - Tracing/Monitoring service
 * Add Unit tests.
 * Add Social Media Auth
+* Add documentation for setting the GitHub Secrets for the CI/CD pipeline
 * ...
 
 ## Installation
