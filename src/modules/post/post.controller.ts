@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Post,
   Put,
@@ -10,12 +11,17 @@ import {
 import { Post as PostModel } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
 
-import { PostService } from './post.service';
+import { InterfaceServiceAlias } from '../../shared/constants/service.constants';
+
+import { PostInterface } from './post.interface';
 
 @ApiTags('posts')
 @Controller('/posts')
 export class PostController {
-  constructor(private postService: PostService) {}
+  constructor(
+    @Inject(InterfaceServiceAlias.POST_SERVICE)
+    private postService: PostInterface,
+  ) {}
 
   @Get('/')
   async getAllPosts(): Promise<PostModel[]> {

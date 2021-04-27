@@ -3,8 +3,10 @@ import { Post, Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
 
+import { PostInterface } from './post.interface';
+
 @Injectable()
-export class PostService {
+export class PostService implements PostInterface {
   constructor(private prisma: PrismaService) {}
 
   async findOne(
