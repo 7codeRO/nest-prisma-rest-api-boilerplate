@@ -22,6 +22,7 @@
 * Add Unit tests.
 * Add Social Media Auth
 * Add documentation for setting the GitHub Secrets for the CI/CD pipeline
+* Add API Throttling - https://docs.nestjs.com/security/rate-limiting
 * ...
 
 ## Installation
