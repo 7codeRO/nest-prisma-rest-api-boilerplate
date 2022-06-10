@@ -20,7 +20,7 @@ export class PostService {
     take?: number;
     cursor?: Prisma.PostWhereUniqueInput;
     where?: Prisma.PostWhereInput;
-    orderBy?: Prisma.PostOrderByInput;
+    orderBy?: Prisma.PostOrderByWithRelationInput;
   }): Promise<Post[]> {
     const { skip, take, cursor, where, orderBy } = params;
     return this.prisma.post.findMany({

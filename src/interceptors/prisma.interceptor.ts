@@ -18,7 +18,8 @@ export class PrismaInterceptor implements NestInterceptor {
     return next.handle().pipe(
       catchError((error) => {
         if (error instanceof PrismaClientKnownRequestError) {
-          const constraint = error.meta && error.meta['target'].join(', ');
+          const constraint =
+            error.meta && (error.meta['target'] as string[]).join(', ');
           const customMessage = PRISMA_ERRORS[error.code].replace(
             '{constraint}',
             constraint,
