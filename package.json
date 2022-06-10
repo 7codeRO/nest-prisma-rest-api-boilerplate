@@ -30,6 +30,7 @@
     "@nestjs/platform-express": "^7.6.13",
     "@nestjs/swagger": "^4.8.0",
     "@prisma/client": "^2.19.0",
+    "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
