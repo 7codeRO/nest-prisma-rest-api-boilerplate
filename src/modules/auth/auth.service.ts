@@ -1,11 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
+import { AuthHelpers } from 'src/shared/helpers/auth.helpers';
+import { GLOBAL_CONFIG } from 'src/configs/global.config';
 
 import { UserService } from '../user/user.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { AuthHelpers } from '../../shared/helpers/auth.helpers';
-import { GLOBAL_CONFIG } from '../../configs/global.config';
 
 import { AuthResponseDTO, LoginUserDTO, RegisterUserDTO } from './auth.dto';
 
@@ -17,7 +17,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  public async login(loginUserDTO: LoginUserDTO): Promise<AuthResponseDTO> {
+  async login(loginUserDTO: LoginUserDTO): Promise<AuthResponseDTO> {
     const userData = await this.userService.findUser({
       email: loginUserDTO.email,
     });
@@ -52,7 +52,8 @@ export class AuthService {
       accessToken: accessToken,
     };
   }
-  public async register(user: RegisterUserDTO): Promise<User> {
+
+  async register(user: RegisterUserDTO): Promise<User> {
     return this.userService.createUser(user);
   }
 }

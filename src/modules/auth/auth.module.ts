@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { JWT_SECRET } from 'src/shared/constants/global.constants';
 
 import { UserService } from '../user/user.service';
-import { JWT_SECRET } from '../../shared/constants/global.constants';
 import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
 
