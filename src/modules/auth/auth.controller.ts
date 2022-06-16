@@ -1,25 +1,25 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
-import { AuthResponseDTO, LoginUserDTO, RegisterUserDTO } from './auth.dto';
+import { UserDTO } from './auth.dto';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('login')
-  @ApiOperation({ description: 'Login user' })
-  @ApiBody({ type: LoginUserDTO })
-  @ApiResponse({ type: AuthResponseDTO })
-  async login(@Body() user: LoginUserDTO): Promise<AuthResponseDTO> {
-    return this.authService.login(user);
+  @Post('register')
+  @ApiOperation({ description: 'Register user' })
+  @ApiBody({ type: UserDTO })
+  async register(@Body() user: UserDTO) {
+    return this.authService.register(user);
   }
 
-  @Post('register')
-  async register(@Body() user: RegisterUserDTO): Promise<User> {
-    return this.authService.register(user);
+  @Post('login')
+  @ApiOperation({ description: 'Login user' })
+  @ApiBody({ type: UserDTO })
+  async login(@Body() user: UserDTO) {
+    return this.authService.login(user);
   }
 }

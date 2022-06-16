@@ -30,6 +30,7 @@
     "@nestjs/platform-express": "^8.4.6",
     "@nestjs/swagger": "^5.2.1",
     "@prisma/client": "^3.15.1",
+    "amazon-cognito-identity-js": "^5.2.9",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "crypto": "^1.0.1",

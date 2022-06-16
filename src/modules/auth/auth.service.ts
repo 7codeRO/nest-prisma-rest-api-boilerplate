@@ -1,59 +1,70 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client';
-import { AuthHelpers } from 'src/shared/helpers/auth.helpers';
-import { GLOBAL_CONFIG } from 'src/configs/global.config';
+import { Injectable } from '@nestjs/common';
+import {
+  AuthenticationDetails,
+  CognitoUser,
+  CognitoUserAttribute,
+  CognitoUserPool,
+  CognitoUserSession,
+} from 'amazon-cognito-identity-js';
 
-import { UserService } from '../user/user.service';
-import { PrismaService } from '../prisma/prisma.service';
-
-import { AuthResponseDTO, LoginUserDTO, RegisterUserDTO } from './auth.dto';
+import { UserDTO } from './auth.dto';
+import { AuthConfig } from './auth.config';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private userService: UserService,
-    private prisma: PrismaService,
-    private jwtService: JwtService,
-  ) {}
+  private userPool: CognitoUserPool;
 
-  async login(loginUserDTO: LoginUserDTO): Promise<AuthResponseDTO> {
-    const userData = await this.userService.findUser({
-      email: loginUserDTO.email,
+  constructor(private authConfig: AuthConfig) {
+    this.userPool = new CognitoUserPool({
+      UserPoolId: this.authConfig.userPoolId,
+      ClientId: this.authConfig.clientId,
     });
-
-    if (!userData) {
-      throw new UnauthorizedException();
-    }
-
-    const isMatch = await AuthHelpers.verify(
-      loginUserDTO.password,
-      userData.password,
-    );
-
-    if (!isMatch) {
-      throw new UnauthorizedException();
-    }
-
-    const payload = {
-      id: userData.id,
-      name: userData.name,
-      email: userData.email,
-      password: null,
-      // role: userData.role,
-    };
-
-    const accessToken = this.jwtService.sign(payload, {
-      expiresIn: GLOBAL_CONFIG.security.expiresIn,
-    });
-
-    return {
-      user: payload,
-      accessToken: accessToken,
-    };
   }
 
-  async register(user: RegisterUserDTO): Promise<User> {
-    return this.userService.createUser(user);
+  async register(user: UserDTO): Promise<CognitoUser> {
+    const { name, email, password } = user;
+
+    return new Promise((resolve, reject) => {
+      return this.userPool.signUp(
+        name || email,
+        password,
+        [new CognitoUserAttribute({ Name: 'email', Value: email })],
+        null,
+        (err, result) => {
+          if (!result) {
+            reject(err);
+          } else {
+            resolve(result.user);
+          }
+        },
+      );
+    });
+  }
+
+  async login(user: UserDTO): Promise<CognitoUserSession> {
+    const { name, email, password } = user;
+
+    const authenticationDetails = new AuthenticationDetails({
+      Username: name || email,
+      Password: password,
+    });
+
+    const userData = {
+      Username: name || email,
+      Pool: this.userPool,
+    };
+
+    const newUser = new CognitoUser(userData);
+
+    return new Promise((resolve, reject) => {
+      return newUser.authenticateUser(authenticationDetails, {
+        onSuccess: (result) => {
+          resolve(result);
+        },
+        onFailure: (err) => {
+          reject(err);
+        },
+      });
+    });
   }
 }
