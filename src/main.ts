@@ -1,15 +1,15 @@
-import { NestFactory } from '@nestjs/core';
-import { ConfigService } from '@nestjs/config';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import { AppModule } from './modules/app/app.module';
-import { API_PREFIX } from './shared/constants/global.constants';
 import { SwaggerConfig } from './configs/config.interface';
-import { PrismaInterceptor } from './interceptors/prisma.interceptor';
 import { GLOBAL_CONFIG } from './configs/global.config';
-import { MyLogger } from './modules/logger/logger.service';
 import { InvalidFormExceptionFilter } from './filters/invalid.form.exception.filter';
+import { PrismaInterceptor } from './interceptors/prisma.interceptor';
+import { AppModule } from './modules/app/app.module';
+import { MyLogger } from './modules/logger/logger.service';
+import { API_PREFIX } from './shared/constants/global.constants';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {

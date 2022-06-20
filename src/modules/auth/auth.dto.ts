@@ -21,6 +21,38 @@ export class UserDTO {
   password: string;
 }
 
+export class UserConfirmDTO {
+  @IsString()
+  @IsNotEmpty()
+  @IsEmail({}, { message: INVALID_EMAIL })
+  email: string;
+
+  @IsString()
+  @IsOptional()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  confirmationCode: string;
+}
+
+export class UserForgotPassword {
+  @IsString()
+  @IsNotEmpty()
+  @IsEmail({}, { message: INVALID_EMAIL })
+  email: string;
+
+  @IsString()
+  @IsOptional()
+  name: string;
+}
+
+export class UserConfigPasswordDTO extends UserDTO {
+  @IsString()
+  @IsNotEmpty()
+  verificationCode: string;
+}
+
 export class LoginUserDTO {
   @IsString()
   @IsNotEmpty()

@@ -11,11 +11,16 @@ import {
 import { GLOBAL_CONFIG } from 'src/configs/global.config';
 import { AuthHelpers } from 'src/shared/helpers/auth.helpers';
 
-import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from '../user/user.service';
 
 import { AuthConfig } from './auth.config';
-import { AuthResponseDTO, UserDTO } from './auth.dto';
+import {
+  AuthResponseDTO,
+  UserConfigPasswordDTO,
+  UserConfirmDTO,
+  UserDTO,
+  UserForgotPassword,
+} from './auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +29,6 @@ export class AuthService {
   constructor(
     private authConfig: AuthConfig,
     private userService: UserService,
-    private prisma: PrismaService,
     private jwtService: JwtService,
   ) {
     this.userPool = new CognitoUserPool({
@@ -53,6 +57,27 @@ export class AuthService {
     });
   }
 
+  async cognitoConfirmUser(user: UserConfirmDTO) {
+    const { name, email, confirmationCode } = user;
+
+    const userData = {
+      Username: name || email,
+      Pool: this.userPool,
+    };
+
+    const cognitoUser = new CognitoUser(userData);
+
+    return new Promise((resolve, reject) => {
+      cognitoUser.confirmRegistration(confirmationCode, true, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
   async cognitoLogin(user: UserDTO): Promise<CognitoUserSession> {
     const { name, email, password } = user;
 
@@ -66,14 +91,58 @@ export class AuthService {
       Pool: this.userPool,
     };
 
-    const newUser = new CognitoUser(userData);
+    const cognitoUser = new CognitoUser(userData);
 
     return new Promise((resolve, reject) => {
-      return newUser.authenticateUser(authenticationDetails, {
+      return cognitoUser.authenticateUser(authenticationDetails, {
         onSuccess: (result) => {
           resolve(result);
         },
         onFailure: (err) => {
+          reject(err);
+        },
+      });
+    });
+  }
+
+  async cognitoForgotPassword(user: UserForgotPassword): Promise<any> {
+    const { name, email } = user;
+
+    const userData = {
+      Username: name || email,
+      Pool: this.userPool,
+    };
+
+    const cognitoUser = new CognitoUser(userData);
+
+    return new Promise((resolve, reject) => {
+      return cognitoUser.forgotPassword({
+        onSuccess: (data) => {
+          resolve(data);
+        },
+        onFailure: (err) => {
+          reject(err);
+        },
+      });
+    });
+  }
+
+  async cognitoConfirmPassword(user: UserConfigPasswordDTO): Promise<string> {
+    const { name, password, email, verificationCode } = user;
+
+    const userData = {
+      Username: name || email,
+      Pool: this.userPool,
+    };
+
+    const cognitoUser = new CognitoUser(userData);
+
+    return new Promise((resolve, reject) => {
+      return cognitoUser.confirmPassword(verificationCode, password, {
+        onSuccess(data) {
+          resolve(data);
+        },
+        onFailure(err) {
           reject(err);
         },
       });
