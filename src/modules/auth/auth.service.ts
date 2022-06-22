@@ -105,7 +105,9 @@ export class AuthService {
     });
   }
 
-  async cognitoForgotPassword(user: UserForgotPassword): Promise<any> {
+  async cognitoForgotPassword(
+    user: UserForgotPassword,
+  ): Promise<{ [key: string]: string }> {
     const { name, email } = user;
 
     const userData = {

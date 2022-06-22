@@ -1,8 +1,7 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { User } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
-
-import { JwtAuthGuard } from '../auth/auth.jwt.guard';
+import { User } from '@prisma/client';
+import { JwtAuthGuard, JwtCognitoAuthGuard } from 'src/modules/auth/guards';
 
 import { UserService } from './user.service';
 
@@ -18,6 +17,7 @@ export class UserController {
   }
 
   @Post()
+  @UseGuards(JwtCognitoAuthGuard)
   async createUser(
     @Body() userData: { name?: string; email: string; password: string },
   ): Promise<User> {
