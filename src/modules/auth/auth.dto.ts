@@ -63,3 +63,19 @@ export class LoginUserDTO {
   @IsNotEmpty()
   password: string;
 }
+
+export class CognitoResponseDTO {
+  @IsString()
+  @IsNotEmpty()
+  sub: string;
+}
+
+export class RefreshTokenDTO {
+  @IsString()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  token: string;
+}

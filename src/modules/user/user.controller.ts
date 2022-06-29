@@ -11,7 +11,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtCognitoAuthGuard)
   async getAll(): Promise<User[]> {
     return this.userService.users({});
   }

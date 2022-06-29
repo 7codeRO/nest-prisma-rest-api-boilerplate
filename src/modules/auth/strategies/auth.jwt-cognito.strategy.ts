@@ -1,10 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { User } from '@prisma/client';
 import { passportJwtSecret } from 'jwks-rsa';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { AuthConfig } from '../auth.config';
+import { CognitoResponseDTO } from '../auth.dto';
 
 @Injectable()
 export class JwtCognitoStrategy extends PassportStrategy(
@@ -26,11 +26,10 @@ export class JwtCognitoStrategy extends PassportStrategy(
     });
   }
 
-  async validate(payload: User): Promise<User> {
-    const { email } = payload;
-    console.log('payload', payload);
+  async validate(payload: CognitoResponseDTO): Promise<CognitoResponseDTO> {
+    const { sub } = payload;
 
-    if (!email) {
+    if (!sub) {
       throw new UnauthorizedException();
     }
 

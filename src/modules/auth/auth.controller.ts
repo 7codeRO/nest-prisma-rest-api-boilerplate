@@ -3,7 +3,7 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 
 import {
-  AuthResponseDTO,
+  AuthResponseDTO, RefreshTokenDTO,
   UserConfigPasswordDTO,
   UserConfirmDTO,
   UserDTO,
@@ -53,6 +53,13 @@ export class AuthController {
   @ApiBody({ type: UserConfigPasswordDTO })
   async cognitoConfirmPassword(@Body() user: UserConfigPasswordDTO) {
     return this.authService.cognitoConfirmPassword(user);
+  }
+
+  @Post('refresh-token-cognito')
+  @ApiOperation({ description: 'Refresh expired AWS cognito auth tokens' })
+  @ApiBody({ type: UserDTO })
+  async cognitoRefreshToken(@Body() token: RefreshTokenDTO) {
+    return this.authService.cognitoRefreshToken(token);
   }
 
   @Post('register')

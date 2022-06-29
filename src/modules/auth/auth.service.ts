@@ -7,6 +7,7 @@ import {
   CognitoUserAttribute,
   CognitoUserPool,
   CognitoUserSession,
+  CognitoRefreshToken,
 } from 'amazon-cognito-identity-js';
 import { GLOBAL_CONFIG } from 'src/configs/global.config';
 import { AuthHelpers } from 'src/shared/helpers/auth.helpers';
@@ -15,7 +16,7 @@ import { UserService } from '../user/user.service';
 
 import { AuthConfig } from './auth.config';
 import {
-  AuthResponseDTO,
+  AuthResponseDTO, RefreshTokenDTO,
   UserConfigPasswordDTO,
   UserConfirmDTO,
   UserDTO,
@@ -69,6 +70,26 @@ export class AuthService {
 
     return new Promise((resolve, reject) => {
       cognitoUser.confirmRegistration(confirmationCode, true, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  async cognitoRefreshToken(refreshToken: RefreshTokenDTO) {
+
+    const userData = {
+      Username: refreshToken.email,
+      Pool: this.userPool,
+    };
+
+    const cognitoUser = new CognitoUser(userData);
+
+    return new Promise((resolve, reject) => {
+      cognitoUser.refreshSession(new CognitoRefreshToken({ RefreshToken: refreshToken.token}), (err, result) => {
         if (err) {
           reject(err);
         } else {
