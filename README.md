@@ -18,6 +18,7 @@
 * Middlewares/Interceptors implementation example.
 
 ## TO-DO
+* Add Mail Service 
 * Add [Recap.DEV](https://recap.dev/) integration - Tracing/Monitoring service
 * Add Unit tests.
 * Add Social Media Auth
