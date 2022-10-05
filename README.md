@@ -74,6 +74,20 @@ $ npx prisma migrate deploy
 $ npx prisma generate
 ```
 
+
+## Auth
+This implementation uses `httpOnly` (server-side) cookie-based authentication. [Read more](https://dev.to/guillerbr/authentication-cookies-http-http-only-jwt-reactjs-context-api-and-node-on-backend-industry-structure-3f8e)
+
+That means that the `JWT Token` is never stored on the client. 
+Usually it was stored in `localStorage` / `sesionStorage` / `cookies` (browser), but this is not secure. 
+
+Storing the token on a server side cookie is more secure, but it requires a small adjustment on frontend HTTP requests in order to work.
+
+Frontend adjustments
+* If you're using `axios` then you need to set: `withCredentials: true`. [Read more](https://flaviocopes.com/axios-credentials/)
+* If you're using `fetch` then you need to set: `credentials: 'include'`. [Read more](https://github.com/github/fetch#sending-cookies)
+
+
 ## Code Style
 Sync your IDE with project eslintrc.js. 
 
