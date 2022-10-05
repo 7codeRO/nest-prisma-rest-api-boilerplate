@@ -19,7 +19,7 @@ jobs:
           node-version: '16.x'
 
       - name: Install npm dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Prisma Client Generate
         run: npx prisma generate
