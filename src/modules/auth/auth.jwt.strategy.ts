@@ -6,11 +6,17 @@ import { User } from '@prisma/client';
 import { JWT_SECRET } from '../../shared/constants/global.constants';
 import { PrismaService } from '../prisma/prisma.service';
 
+const cookieExtractor = (req) => req?.cookies.accessToken;
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private prisma: PrismaService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+        ExtractJwt.fromUrlQueryParameter('token'),
+        cookieExtractor,
+      ]),
       ignoreExpiration: process.env.NODE_ENV === 'dev',
       secretOrKey: JWT_SECRET,
     });
