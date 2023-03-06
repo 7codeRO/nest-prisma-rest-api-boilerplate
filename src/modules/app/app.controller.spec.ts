@@ -12,4 +12,11 @@ describe('AppController', () => {
       providers: [AppService],
     }).compile();
   });
+
+  describe('root', () => {
+    it('should return "Hello World!"', () => {
+      const appController = _app.get<AppController>(AppController);
+      expect(appController.getHello()).toBe('Hello World!');
+    });
+  });
 });
