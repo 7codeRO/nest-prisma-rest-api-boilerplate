@@ -11,7 +11,6 @@ import { SwaggerConfig } from './configs/config.interface';
 import { GLOBAL_CONFIG } from './configs/global.config';
 import { MyLogger } from './modules/logger/logger.service';
 import { InvalidFormExceptionFilter } from './filters/invalid.form.exception.filter';
-import { HttpExceptionFilter } from './filters/http.exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -21,7 +20,7 @@ async function bootstrap() {
   app.setGlobalPrefix(API_PREFIX);
 
   app.useGlobalFilters(
-    new HttpExceptionFilter(),
+    // new HttpExceptionFilter(), // TODO: finish this
     new InvalidFormExceptionFilter(),
   );
 
