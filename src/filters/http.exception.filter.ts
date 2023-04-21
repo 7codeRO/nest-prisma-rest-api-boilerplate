@@ -4,6 +4,7 @@ import {
   ArgumentsHost,
   HttpException,
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 
 import { MyLogger } from '../modules/logger/logger.service';
 
@@ -18,5 +19,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const logger = new MyLogger();
     logger.setContext('HttpException');
     logger.error(`[${exception.name}]: [${status}] ${exception.message}`);
+
+    response.status(status).json(response.json);
   }
 }
