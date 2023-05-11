@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
@@ -11,6 +11,7 @@ import { SwaggerConfig } from './configs/config.interface';
 import { GLOBAL_CONFIG } from './configs/global.config';
 import { MyLogger } from './modules/logger/logger.service';
 import { InvalidFormExceptionFilter } from './filters/invalid.form.exception.filter';
+import { AllExceptionsFilter } from './filters/all.exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -20,7 +21,7 @@ async function bootstrap() {
   app.setGlobalPrefix(API_PREFIX);
 
   app.useGlobalFilters(
-    // new HttpExceptionFilter(), // TODO: finish this
+    new AllExceptionsFilter(app.get(HttpAdapterHost)),
     new InvalidFormExceptionFilter(),
   );
 
