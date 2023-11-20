@@ -21,6 +21,7 @@
     "prisma:seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-sqs": "^3.454.0",
     "@nestjs/common": "^9.1.4",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.1.4",
